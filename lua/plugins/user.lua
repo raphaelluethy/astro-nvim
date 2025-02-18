@@ -85,9 +85,4 @@ return {
       opts.mode = "symbol_text"
     end,
   },
-  { "nvim-neo-tree/neo-tree.nvim", enabled = false },
-  {
-    "stevearc/dressing.nvim",
-    enabled = false,
-  },
 }

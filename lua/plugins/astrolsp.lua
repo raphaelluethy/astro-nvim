@@ -14,6 +14,7 @@ return {
       inlay_hints = false, -- enable/disable inlay hints on start
       semantic_tokens = true, -- enable/disable semantic token highlighting
     },
+
     -- customize lsp formatting options
     formatting = {
       -- control auto formatting on save
@@ -52,6 +53,13 @@ return {
       -- the key is the server that is being setup with `lspconfig`
       -- rust_analyzer = false, -- setting a handler to false will disable the set up of that language server
       -- pyright = function(_, opts) require("lspconfig").pyright.setup(opts) end -- or a custom handler function can be passed
+    },
+    lsp_handlers = {
+      ["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "none", silent = true }),
+      ["textDocument/signatureHelp"] = vim.lsp.with(
+        vim.lsp.handlers.signature_help,
+        { border = "none", silent = true, focusable = false }
+      ),
     },
     -- Configure buffer local auto commands to add when attaching a language server
     autocmds = {
