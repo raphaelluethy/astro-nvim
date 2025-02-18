@@ -1,5 +1,3 @@
-if true then return {} end -- WARN: REMOVE THIS LINE TO ACTIVATE THIS FILE
-
 -- AstroCore provides a central place to modify mappings, vim options, autocommands, and more!
 -- Configuration documentation can be found with `:h astrocore`
 -- NOTE: We highly recommend setting up the Lua Language Server (`:LspInstall lua_ls`)
@@ -18,6 +16,8 @@ return {
       diagnostics_mode = 3, -- diagnostic mode on start (0 = off, 1 = no signs/virtual text, 2 = no virtual text, 3 = on)
       highlighturl = true, -- highlight URLs at start
       notifications = true, -- enable notifications at start
+      mousescroll = "ver:3,hor:0",
+      mouse = "a",
     },
     -- Diagnostics configuration (for vim.diagnostics.config({...})) when diagnostics are on
     diagnostics = {
@@ -27,23 +27,44 @@ return {
     -- vim options can be configured here
     options = {
       opt = { -- vim.opt.<key>
-        relativenumber = true, -- sets vim.opt.relativenumber
-        number = true, -- sets vim.opt.number
-        spell = false, -- sets vim.opt.spell
-        signcolumn = "yes", -- sets vim.opt.signcolumn to yes
-        wrap = false, -- sets vim.opt.wrap
-        list = true, -- sets vim.opt.list
-        tabstop = 4, -- sets vim.opt.tabstop to 4
-        shiftwidth = 4, -- sets vim.opt.shiftwidth to 4
-        textwidth = 80, -- sets vim.opt.textwidth to 80
-        linebreak = true, -- sets vim.opt.linebreak
+        relativenumber = true,
+        number = true,
+        spell = false,
+        signcolumn = "yes",
+        wrap = true,
+        list = true,
+        tabstop = 4,
+        shiftwidth = 4,
+        textwidth = 80,
+        linebreak = true,
         colorcolumn = "80",
+        breakindent = true,
+        undofile = true,
+        ignorecase = true,
+        smartcase = true,
+        updatetime = 250,
+        timeoutlen = 300,
+        splitright = true,
+        splitbelow = true,
+        cursorline = true,
+        scrolloff = 10,
+        inccommand = "split",
+        listchars = {
+          tab = "▸ ",
+          trail = "•",
+          space = "·",
+          extends = ">",
+          precedes = "<",
+        },
       },
       g = { -- vim.g.<key>
         -- configure global vim variables (vim.g)
         -- NOTE: `mapleader` and `maplocalleader` must be set in the AstroNvim opts or before `lazy.setup`
         -- This can be found in the `lua/lazy_setup.lua` file
+        have_nerd_font = true,
       },
+      -- Schedule clipboard setting to avoid startup issues
+      vim.schedule(function() vim.opt.clipboard = "unnamedplus" end),
     },
     -- Mappings can be configured through AstroCore as well.
     -- NOTE: keycodes follow the casing in the vimdocs. For example, `<Leader>` must be capitalized
@@ -68,14 +89,26 @@ return {
 
         ["<Esc>"] = { ":nohlsearch<CR>", desc = "Clear search" },
         ["gh"] = { vim.diagnostic.open_float, desc = "Show diagnostics" },
-        ["<C-h>"] = { "<C-w><C-h>", desc = "Move focus to the left window" },
-        ["<C-l>"] = { "<C-w><C-l>", desc = "Move focus to the right window" },
-        ["<C-j>"] = { "<C-w><C-j>", desc = "Move focus to the lower window" },
-        ["<C-k>"] = { "<C-w><C-k>", desc = "Move focus to the upper window" },
-        ["<leader>sv"] = { "<CMD>vsplit<CR>", desc = "[S]plit [V]ertically" },
+        -- ["<C-h>"] = { "<C-w><C-h>", desc = "Move focus to the left window" },
+        -- ["<C-l>"] = { "<C-w><C-l>", desc = "Move focus to the right window" },
+        -- ["<C-j>"] = { "<C-w><C-j>", desc = "Move focus to the lower window" },
+        -- ["<C-k>"] = { "<C-w><C-k>", desc = "Move focus to the upper window" },
+        -- ["<Leader>sv"] = { "<CMD>vsplit<CR>", desc = "[S]plit [V]ertically" },
 
         ["c"] = { '"_c', desc = "Change to blackhole register" },
         ["C"] = { '"_C', desc = "Change to blackhole register" },
+
+        ["<C-d>"] = { "<C-d>zz", desc = "Scroll down" },
+        ["<C-u>"] = { "<C-u>zz", desc = "Scroll up" },
+        ["<Leader>fg"] = { require("telescope.builtin").live_grep, desc = "Live grep" },
+        ["<Leader>sf"] = { require("telescope.builtin").find_files, desc = "[S]earch [F]iles" },
+        ["<Leader>sp"] = { require("telescope.builtin").git_files, desc = "[S]earch [P]roject" },
+        ["<Leader>sa"] = {
+          function()
+            require("telescope.builtin").find_files { find_command = { "rg", "--files", "--hidden", "-g", "!.git" } }
+          end,
+          desc = "[S]earch [A]ll Files",
+        },
       },
       v = {
         ["J"] = { ":m '>+1<CR>gv=gv", desc = "Move line down" },
