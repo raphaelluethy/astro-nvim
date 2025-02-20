@@ -101,13 +101,13 @@ return {
         ["<C-d>"] = { "<C-d>zz", desc = "Scroll down" },
         ["<C-u>"] = { "<C-u>zz", desc = "Scroll up" },
         ["<Leader>fg"] = { require("telescope.builtin").live_grep, desc = "Live grep" },
-        ["<Leader>sf"] = { require("telescope.builtin").find_files, desc = "[S]earch [F]iles" },
-        ["<Leader>sp"] = { require("telescope.builtin").git_files, desc = "[S]earch [P]roject" },
-        ["<Leader>sa"] = {
+        -- ["<Leader>sf"] = { require("telescope.builtin").find_files, desc = "[S]earch [F]iles" },
+        ["<Leader>fp"] = { require("telescope.builtin").git_files, desc = "[F]ind [P]roject" },
+        ["<Leader>fa"] = {
           function()
             require("telescope.builtin").find_files { find_command = { "rg", "--files", "--hidden", "-g", "!.git" } }
           end,
-          desc = "[S]earch [A]ll Files",
+          desc = "[F]ind [A]ll Files",
         },
       },
       v = {
